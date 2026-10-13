@@ -14,7 +14,1201 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@200;300;400;500&family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;1,6..72,300&display=swap"
               rel="stylesheet">
-        <link rel="stylesheet" href="templatemo-630-helix-style.css">
+        <style>
+/*
+  Berbasis template Helix Drift
+  https://templatemo.com/tm-630-helix-drift
+*/
+
+:root {
+    --canvas: #F4F7FA;
+    --sunk: #DDE7F2;
+    --pastel: #B9CDE5;
+    --pastel-deep: #96B1D0;
+    --ink: #1B2233;
+    --ink-2: #5B6879;
+    --ink-3: #93A0B2;
+    --accent: #4A6E96;
+
+    --bar: 70px;
+    --plate-w: min(46vw, 620px);
+
+    --rx: 600;
+    --ry: 54;
+    --coil: 0.9;
+    --fall: 0.52;
+
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    --dur: .6s;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--bar) + 18px);
+    scrollbar-gutter: stable;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: 'Albert Sans', system-ui, sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* ambient washes */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(120vw 90vh at 8% -10%, rgba(185, 205, 229, .55), transparent 62%),
+        radial-gradient(110vw 80vh at 98% 108%, rgba(221, 231, 242, .85), transparent 60%);
+}
+
+/* grid + grain */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.34' numOctaves='2' stitchTiles='stitch'/></filter><rect width='320' height='320' filter='url(%23n)' opacity='0.10'/></svg>"),
+        linear-gradient(to right, rgba(150, 177, 208, .30) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(150, 177, 208, .30) 1px, transparent 1px);
+    background-size: 320px 320px, 72px 72px, 72px 72px;
+    mix-blend-mode: overlay;
+    opacity: .5;
+    -webkit-mask-image: radial-gradient(80vw 80vh at 50% 42%, #000 20%, transparent 82%);
+    mask-image: radial-gradient(80vw 80vh at 50% 42%, #000 20%, transparent 82%);
+}
+
+.wrap {
+    position: relative;
+    z-index: 1
+}
+
+/* ---------- bar ---------- */
+.bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--bar);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(18px, 4vw, 54px);
+    background: rgba(244, 247, 250, .72);
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+    border-bottom: 1px solid rgba(150, 177, 208, .28);
+}
+
+.brand {
+    font-family: 'Newsreader', serif;
+    font-weight: 300;
+    font-size: 1.06rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: .62rem;
+    text-decoration: none;
+}
+
+.brand i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: block;
+    flex: 0 0 auto;
+}
+
+.nav {
+    display: flex;
+    gap: 2rem;
+    align-items: center
+}
+
+.nav a {
+    position: relative;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: .78rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    font-weight: 300;
+    padding: 14px 0 6px;
+}
+
+/* hover drops a chevron in from above the label */
+.nav a,
+.drawer a {
+    transition: color .34s var(--ease)
+}
+
+.nav a:hover,
+.nav a:focus-visible,
+.drawer a:hover,
+.drawer a:focus-visible {
+    color: var(--accent)
+}
+
+.wv {
+    position: absolute;
+    left: 50%;
+    top: 2px;
+    width: 10px;
+    height: 6px;
+    overflow: visible;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -7px);
+    transition: opacity .3s var(--ease), transform .42s var(--ease);
+}
+
+.wv path {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.nav a:hover .wv,
+.nav a:focus-visible .wv {
+    opacity: 1;
+    transform: translate(-50%, 0)
+}
+
+.drawer a {
+    position: relative;
+    padding: .95rem 0 .85rem
+}
+
+.drawer a .wv {
+    left: 0;
+    top: 2px;
+    bottom: auto;
+    transform: translate(0, -7px)
+}
+
+.drawer a:hover .wv,
+.drawer a:focus-visible .wv {
+    opacity: 1;
+    transform: translate(0, 0)
+}
+
+.burger {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(150, 177, 208, .5);
+    background: transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.burger span {
+    display: block;
+    width: 16px;
+    height: 1px;
+    background: var(--ink);
+    transition: transform .3s var(--ease), opacity .3s
+}
+
+.burger[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(3px) rotate(45deg)
+}
+
+.burger[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0
+}
+
+.burger[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-3px) rotate(-45deg)
+}
+
+/* drawer is a SIBLING of .bar, never a child */
+.drawer {
+    position: fixed;
+    top: var(--bar);
+    left: 0;
+    right: 0;
+    z-index: 55;
+    height: calc(100dvh - var(--bar));
+    padding: 1.9rem clamp(18px, 5vw, 40px) 80px;
+    background: var(--canvas);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+    transform: translateY(-12px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .32s var(--ease), transform .32s var(--ease), visibility .32s;
+}
+
+.drawer.open {
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto
+}
+
+/* page behind the open drawer stops scrolling, so only one scrollbar is ever live */
+body.lock {
+    overflow: hidden
+}
+
+/* the spool controls slide off to their own side once the stage is scrolled past */
+body.away .transport {
+    transform: translateX(calc(-100% - 30px));
+    opacity: 0;
+    pointer-events: none
+}
+
+body.away .fab,
+body.away .panel {
+    transform: translateX(calc(100% + 30px));
+    opacity: 0;
+    pointer-events: none
+}
+
+body.lock .transport,
+body.lock .fab {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+}
+
+.drawer a {
+    color: var(--ink);
+    text-decoration: none;
+    font-family: 'Newsreader', serif;
+    font-size: 1.15rem;
+    font-weight: 300;
+    letter-spacing: .01em;
+    border-bottom: 1px solid rgba(150, 177, 208, .3);
+}
+
+/* ---------- stage ---------- */
+.stage-shell {
+    padding-top: var(--bar)
+}
+
+.stage {
+    position: relative;
+    height: min(62vh, 560px);
+    min-height: 340px;
+    perspective: 1400px;
+    touch-action: pan-y;
+    cursor: grab;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.stage.grabbing {
+    cursor: grabbing
+}
+
+.plate {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: block;
+    width: var(--plate-w);
+    aspect-ratio: 16/10;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    -webkit-user-drag: none;
+    user-select: none;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    /* promoted once at parse time, never toggled, toggling is what flashes on mobile */
+    will-change: transform, opacity;
+}
+
+.plate>* {
+    pointer-events: none
+}
+
+.plate-media {
+    position: absolute;
+    inset: 0;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: var(--sunk);
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 22px 46px -20px rgba(27, 34, 51, .42), 0 2px 6px rgba(27, 34, 51, .08);
+}
+
+.plate-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .42);
+    border-radius: 3px;
+}
+
+.plate-no {
+    position: absolute;
+    left: 0;
+    bottom: -30px;
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: .9rem;
+    color: var(--ink-3);
+    letter-spacing: .04em;
+    opacity: 0;
+    transition: opacity .3s;
+}
+
+.plate.is-centre .plate-no {
+    opacity: 1
+}
+
+.plate.press .plate-media {
+    transform: scale(.988);
+    transition: transform .14s var(--ease)
+}
+
+.plate:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 6px
+}
+
+/* the real copy lives here in the markup, the caption block reads it out */
+.plate-info {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* ---------- caption ---------- */
+.caption {
+    max-width: 620px;
+    min-height: 96px;
+    margin: 1.9rem auto 0;
+    padding: 0 clamp(18px, 5vw, 24px);
+    transition: opacity .22s var(--ease), transform .22s var(--ease);
+}
+
+.caption.swap {
+    opacity: 0;
+    transform: translateY(6px)
+}
+
+.cap-head {
+    display: flex;
+    align-items: baseline;
+    gap: .9rem;
+    margin-bottom: .5rem
+}
+
+.cap-no {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.15rem;
+    color: var(--accent)
+}
+
+.cap-rule {
+    flex: 0 0 34px;
+    height: 1px;
+    background: var(--pastel);
+    transform: translateY(-4px)
+}
+
+.cap-title {
+    font-family: 'Newsreader', serif;
+    font-weight: 300;
+    font-size: 1.5rem;
+    letter-spacing: -.02em;
+    line-height: 1.2
+}
+
+.cap-desc {
+    font-size: .94rem;
+    line-height: 1.62;
+    color: var(--ink-2);
+    font-weight: 300;
+    max-width: 56ch
+}
+
+.cap-meta {
+    margin-top: .7rem;
+    font-size: .7rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.1rem;
+}
+
+/* ---------- scrub ---------- */
+.scrub-shell {
+    margin: 1.9rem auto 0;
+    width: 340px;
+    max-width: calc(100vw - 44px);
+    min-width: 0;
+}
+
+.scrub {
+    position: relative;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    touch-action: none;
+    cursor: pointer;
+}
+
+.scrub:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 6px;
+    border-radius: 4px
+}
+
+.scrub-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--sunk);
+    box-shadow: inset 0 1px 2px rgba(90, 110, 145, .22), inset 0 -1px 0 rgba(255, 255, 255, .9);
+}
+
+.scrub-fill {
+    position: absolute;
+    left: 0;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--pastel-deep);
+    width: 0;
+}
+
+.scrub-ticks {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 26px;
+    pointer-events: none
+}
+
+.tick {
+    position: absolute;
+    top: 50%;
+    width: 1px;
+    height: 9px;
+    margin-top: -4.5px;
+    background: var(--pastel);
+    transition: height .3s var(--ease), background .3s, margin-top .3s var(--ease);
+}
+
+.tick.on {
+    height: 13px;
+    margin-top: -6.5px;
+    background: var(--accent)
+}
+
+.thumb {
+    position: absolute;
+    top: 50%;
+    width: 34px;
+    height: 14px;
+    margin-top: -7px;
+    margin-left: -17px;
+    border-radius: 7px;
+    background: #fff;
+    border: 1px solid var(--pastel);
+    box-shadow: 0 3px 8px rgba(90, 110, 145, .28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    pointer-events: none;
+}
+
+.thumb i {
+    width: 1px;
+    height: 6px;
+    background: var(--pastel-deep);
+    display: block
+}
+
+.scrub-label {
+    margin-top: .7rem;
+    text-align: center;
+    font-size: .7rem;
+    letter-spacing: .18em;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- footer ---------- */
+.foot {
+    margin-top: clamp(48px, 8vh, 96px);
+    background: var(--sunk);
+    border-top: 1px solid rgba(150, 177, 208, .4);
+    padding: 2.4rem clamp(18px, 5vw, 54px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .78rem;
+    color: var(--ink-2);
+}
+
+.foot a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(74, 110, 150, .35)
+}
+
+.foot a:hover {
+    border-bottom-color: var(--accent)
+}
+
+/* ---------- coil control ---------- */
+.fab {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 70;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .86);
+    border: 1px solid var(--pastel);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 6px 18px -6px rgba(27, 34, 51, .3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity .3s var(--ease), transform .3s var(--ease);
+}
+
+.fab.gone {
+    opacity: 0;
+    transform: scale(.68);
+    pointer-events: none
+}
+
+.fab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px
+}
+
+.panel {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 71;
+    width: min(308px, calc(100vw - 28px));
+    padding: 1.15rem 1.15rem .95rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .82);
+    backdrop-filter: blur(16px) saturate(124%);
+    -webkit-backdrop-filter: blur(16px) saturate(124%);
+    border: 1px solid rgba(255, 255, 255, .9);
+    box-shadow: -6px -6px 16px rgba(255, 255, 255, .9), 6px 6px 20px rgba(150, 177, 208, .34);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px) scale(.97);
+    pointer-events: none;
+    transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s;
+}
+
+.panel.open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto
+}
+
+.panel h2 {
+    font-family: 'Newsreader', serif;
+    font-weight: 300;
+    font-size: .94rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 1rem;
+}
+
+.slot {
+    margin-bottom: .85rem
+}
+
+.slot label {
+    display: flex;
+    justify-content: space-between;
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: .45rem;
+    font-variant-numeric: tabular-nums;
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 16px;
+    background: transparent;
+    cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, var(--pastel-deep) 0 var(--fill, 50%), var(--sunk) var(--fill, 50%) 100%);
+    box-shadow: inset 0 1px 2px rgba(90, 110, 145, .2);
+}
+
+input[type=range]::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, var(--pastel-deep) 0 var(--fill, 50%), var(--sunk) var(--fill, 50%) 100%);
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--pastel-deep);
+    margin-top: -5.5px;
+    box-shadow: 0 2px 5px rgba(90, 110, 145, .3);
+}
+
+input[type=range]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 1px solid var(--pastel-deep);
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(90, 110, 145, .3);
+}
+
+input[type=range]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 4px
+}
+
+.panel-out {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    margin-top: .9rem;
+    padding-top: .75rem;
+    border-top: 1px solid rgba(150, 177, 208, .35);
+}
+
+.state {
+    font-size: .76rem;
+    color: var(--ink-2);
+    letter-spacing: .02em
+}
+
+.close {
+    margin-left: auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--pastel);
+    background: rgba(255, 255, 255, .9);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: -3px -3px 8px rgba(255, 255, 255, .9), 3px 3px 8px rgba(150, 177, 208, .3);
+    color: var(--ink-2);
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.close:active {
+    box-shadow: inset 2px 2px 5px rgba(150, 177, 208, .35)
+}
+
+.close:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px
+}
+
+
+/* ---------- sheets ---------- */
+.sheet {
+    max-width: 620px;
+    margin: clamp(52px, 9vh, 104px) auto 0;
+    padding: 0 clamp(18px, 5vw, 24px);
+}
+
+.sheet-tag {
+    display: block;
+    font-size: .68rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: .9rem;
+}
+
+.sheet h2 {
+    font-family: 'Newsreader', serif;
+    font-weight: 300;
+    font-size: clamp(1.5rem, 3.4vw, 2rem);
+    letter-spacing: -.02em;
+    line-height: 1.18;
+    margin-bottom: 1rem;
+}
+
+.sheet p {
+    font-size: .95rem;
+    line-height: 1.75;
+    color: var(--ink-2);
+    margin-bottom: 1rem;
+    max-width: 58ch
+}
+
+.facts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    margin-top: 1.6rem;
+    background: rgba(150, 177, 208, .35);
+    border: 1px solid rgba(150, 177, 208, .35);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.facts>div {
+    background: var(--canvas);
+    padding: .95rem 1rem
+}
+
+.facts dt {
+    font-size: .66rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: .35rem
+}
+
+.facts dd {
+    font-family: 'Newsreader', serif;
+    font-weight: 300;
+    font-size: 1.15rem;
+    color: var(--ink)
+}
+
+.lines {
+    list-style: none;
+    margin-top: 1.4rem;
+    border-top: 1px solid rgba(150, 177, 208, .35)
+}
+
+.lines li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.4rem;
+    align-items: baseline;
+    padding: .85rem 0;
+    border-bottom: 1px solid rgba(150, 177, 208, .35);
+}
+
+.lines span {
+    flex: 0 0 84px;
+    font-size: .66rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+
+.lines a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(74, 110, 150, .3);
+    font-size: .95rem
+}
+
+.lines a:hover {
+    border-bottom-color: var(--accent);
+    color: var(--accent)
+}
+
+/* ---------- transport ---------- */
+.transport {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    padding: .45rem .7rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .86);
+    border: 1px solid var(--pastel);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    box-shadow: 0 6px 18px -6px rgba(27, 34, 51, .3);
+    transition: opacity .28s var(--ease), transform .28s var(--ease);
+}
+
+.tp-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    border: 1px solid var(--pastel);
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(90, 110, 145, .22);
+}
+
+.tp-btn .ico-pause {
+    display: none
+}
+
+.tp-btn.playing .ico-play {
+    display: none
+}
+
+.tp-btn.playing .ico-pause {
+    display: block
+}
+
+.tp-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100px
+}
+
+.tp-line {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: var(--sunk);
+    box-shadow: inset 0 1px 2px rgba(90, 110, 145, .2);
+}
+
+.tp-line i {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: var(--accent)
+}
+
+.tp-dur {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%
+}
+
+.tp-step {
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    border: 1px solid var(--pastel);
+    background: #fff;
+    color: var(--ink-2);
+    font-size: .82rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tp-step[disabled] {
+    opacity: .35;
+    cursor: default
+}
+
+.tp-val {
+    flex: 1 1 auto;
+    text-align: center;
+    font-size: .68rem;
+    letter-spacing: .08em;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+}
+
+.tp-btn:focus-visible,
+.tp-step:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px
+}
+
+/* ---------- reveal ---------- */
+.rv {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity .7s var(--ease), transform .7s var(--ease)
+}
+
+.rv.in {
+    opacity: 1;
+    transform: none
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px) {
+
+    /* fixed + mix-blend-mode repaints the whole layer on every scroll frame on mobile */
+    body::before,
+    body::after {
+        position: absolute;
+        mix-blend-mode: normal
+    }
+
+    body::after {
+        opacity: .28
+    }
+
+    :root {
+        --bar: 64px;
+        --plate-w: min(74vw, 420px);
+        --rx: 280;
+    }
+
+    .nav {
+        display: none
+    }
+
+    .burger {
+        display: flex
+    }
+
+    .bar {
+        background: var(--canvas);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none
+    }
+
+    .stage {
+        height: 48vh;
+        min-height: 280px
+    }
+
+    .caption {
+        margin-top: 1.4rem
+    }
+}
+
+@media (max-width:560px) {
+    :root {
+        --plate-w: min(80vw, 360px);
+        --rx: 200;
+    }
+
+    .cap-title {
+        font-size: 1.28rem
+    }
+
+    .facts {
+        grid-template-columns: 1fr
+    }
+
+    .transport {
+        left: 14px;
+        bottom: 14px;
+        gap: .55rem;
+        padding: .4rem .55rem
+    }
+
+    .tp-stack {
+        width: 78px
+    }
+
+    .fab {
+        right: 16px;
+        bottom: 16px;
+        width: 42px;
+        height: 42px
+    }
+
+    .panel {
+        right: 14px;
+        bottom: 14px
+    }
+}
+
+@media (prefers-reduced-motion:reduce) {
+    html {
+        scroll-behavior: auto
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .001ms !important;
+        transition-duration: .001ms !important
+    }
+
+    .rv {
+        opacity: 1;
+        transform: none
+    }
+}
+
+
+/* ---------- konten slide ---------- */
+.caption {
+    max-width: 680px;
+    min-height: 330px;
+}
+
+.cap-points {
+    list-style: none;
+    margin: .2rem 0 .8rem;
+}
+
+.cap-points li {
+    position: relative;
+    padding-left: 1.1rem;
+    font-size: .98rem;
+    line-height: 1.55;
+    color: var(--ink);
+    font-weight: 300;
+    margin-bottom: .35rem;
+}
+
+.cap-points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .72em;
+    width: 6px;
+    height: 1px;
+    background: var(--accent);
+}
+
+.cap-visual {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: .9rem;
+    line-height: 1.5;
+    color: var(--ink-3);
+    max-width: 58ch;
+}
+
+.cap-notes {
+    margin-top: .7rem;
+    max-width: 62ch;
+}
+
+.cap-notes summary {
+    cursor: pointer;
+    font-size: .82rem;
+    color: var(--accent);
+    list-style: none;
+}
+
+.cap-notes summary::-webkit-details-marker { display: none }
+
+.cap-notes summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.cap-notes summary::before {
+    content: "+ ";
+}
+
+.cap-notes[open] summary::before {
+    content: "\2212 ";
+}
+
+.cap-notes p {
+    margin-top: .5rem;
+    font-size: .9rem;
+    line-height: 1.65;
+    color: var(--ink-2);
+}
+
+.copy-md {
+    margin-top: 1.4rem;
+    padding: .65rem 1.1rem;
+    font: inherit;
+    font-size: .88rem;
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--pastel-deep);
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.copy-md:hover { background: var(--sunk) }
+
+.copy-md:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.copy-state {
+    margin-left: .9rem;
+    font-size: .82rem;
+    color: var(--ink-2);
+}
+
+@media (max-width: 640px) {
+    .caption { min-height: 400px }
+}
+
+</style>
     </head>
     <body>
         <header class="bar">
@@ -70,7 +1264,7 @@
                                         <div class="plate"
                          role="button"
                          tabindex="0"
-                         data-img="images/slide-01.svg"
+                         data-img="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjQwIDQwMCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0Y0RjdGQSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0RERTdGMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjQwMCIgZmlsbD0idXJsKCNnKSIvPgo8cG9seWdvbiBwb2ludHM9IjQ3MCw3MCA0MDAsMjAwIDQ1MCwyMDAgNDIwLDMzMCA1MjAsMTcwIDQ2NiwxNzAiIGZpbGw9IiM0QTZFOTYiLz48cG9seWdvbiBwb2ludHM9IjQ3MCw3MCA0MDAsMjAwIDQ1MCwyMDAgNDIwLDMzMCA1MjAsMTcwIDQ2NiwxNzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0I5Q0RFNSIgc3Ryb2tlLXdpZHRoPSIxMCIgc3Ryb2tlLW9wYWNpdHk9Ii4zNSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTEwLDgpIi8+PHRleHQgeD0iNDgiIHk9IjE3MCIgZm9udC1zaXplPSI1NiIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXdlaWdodD0iMzAwIiA+U3VwYWJhc2U8L3RleHQ+PGxpbmUgeDE9IjUwIiB5MT0iMTkyIiB4Mj0iMTUwIiB5Mj0iMTkyIiBzdHJva2U9IiM0QTZFOTYiIHN0cm9rZS13aWR0aD0iMS41IiAvPjx0ZXh0IHg9IjUwIiB5PSIyMjQiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM1QjY4NzkiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgZm9udC1zdHlsZT0iaXRhbGljIj5CYWNrZW5kIG9wZW4gc291cmNlPC90ZXh0Pjx0ZXh0IHg9IjUwIiB5PSIyNTAiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM1QjY4NzkiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgZm9udC1zdHlsZT0iaXRhbGljIj51bnR1ayBlcmEgYmlzbmlzIGRpZ2l0YWw8L3RleHQ+Cjwvc3ZnPg=="
                          data-alt="Pembuka"
                          data-month="Hook &amp; subjudul"
                          data-stock="± 45 detik">
@@ -86,7 +1280,7 @@
                     <div class="plate"
                          role="button"
                          tabindex="0"
-                         data-img="images/slide-02.svg"
+                         data-img="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjQwIDQwMCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0Y0RjdGQSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0RERTdGMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjQwMCIgZmlsbD0idXJsKCNnKSIvPgo8dGV4dCB4PSIzMjAiIHk9IjYyIiBmb250LXNpemU9IjIwIiBmaWxsPSIjMUIyMjMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXdlaWdodD0iMzAwIiA+VGlnYSB0ZWthbmFuIHBhZGEgcGVuZ2VtYmFuZyBkaSBJbmRvbmVzaWE8L3RleHQ+PGNpcmNsZSBjeD0iMTEwIiBjeT0iMjEwIiByPSI3MiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEuMiIvPjxjaXJjbGUgY3g9IjExMCIgY3k9IjIxMCIgcj0iNTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0I5Q0RFNSIgc3Ryb2tlLWRhc2hhcnJheT0iMyA1Ii8+PHRleHQgeD0iMTEwIiB5PSIyMDYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiMxQjIyMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNTAwIiA+QmlheWEgJmFtcDsgd2FrdHU8L3RleHQ+PHRleHQgeD0iMTEwIiB5PSIyMjgiIGZvbnQtc2l6ZT0iMTIuNSIgZmlsbD0iIzVCNjg3OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiID5iYWNrZW5kIGRhcmkgbm9sPC90ZXh0PjxjaXJjbGUgY3g9IjMyMCIgY3k9IjIxMCIgcj0iNzIiIGZpbGw9IiNmZmYiIHN0cm9rZT0iIzk2QjFEMCIgc3Ryb2tlLXdpZHRoPSIxLjIiLz48Y2lyY2xlIGN4PSIzMjAiIGN5PSIyMTAiIHI9IjU2IiBmaWxsPSJub25lIiBzdHJva2U9IiNCOUNERTUiIHN0cm9rZS1kYXNoYXJyYXk9IjMgNSIvPjx0ZXh0IHg9IjMyMCIgeT0iMjA2IiBmb250LXNpemU9IjE1IiBmaWxsPSIjMUIyMjMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjUwMCIgPlZlbmRvciBsb2NrLWluPC90ZXh0Pjx0ZXh0IHg9IjMyMCIgeT0iMjI4IiBmb250LXNpemU9IjEyLjUiIGZpbGw9IiM1QjY4NzkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiA+bGF5YW5hbiB0ZXJ0dXR1cDwvdGV4dD48Y2lyY2xlIGN4PSI1MzAiIGN5PSIyMTAiIHI9IjcyIiBmaWxsPSIjZmZmIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PGNpcmNsZSBjeD0iNTMwIiBjeT0iMjEwIiByPSI1NiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQjlDREU1IiBzdHJva2UtZGFzaGFycmF5PSIzIDUiLz48dGV4dCB4PSI1MzAiIHk9IjIwNiIgZm9udC1zaXplPSIxNSIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI1MDAiID5LZWRhdWxhdGFuIGRhdGE8L3RleHQ+PHRleHQgeD0iNTMwIiB5PSIyMjgiIGZvbnQtc2l6ZT0iMTIuNSIgZmlsbD0iIzVCNjg3OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiID5VVSBQRFAgMjcvMjAyMjwvdGV4dD48bGluZSB4MT0iMTgyIiB5MT0iMjEwIiB4Mj0iMjQ4IiB5Mj0iMjEwIiBzdHJva2U9IiM0QTZFOTYiIHN0cm9rZS13aWR0aD0iMS41IiAvPjxsaW5lIHgxPSIzOTIiIHkxPSIyMTAiIHgyPSI0NTgiIHkyPSIyMTAiIHN0cm9rZT0iIzRBNkU5NiIgc3Ryb2tlLXdpZHRoPSIxLjUiIC8+PHRleHQgeD0iMzIwIiB5PSIzNTAiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiM0QTZFOTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCAnVGltZXMgTmV3IFJvbWFuJywgc2VyaWYiIGZvbnQtd2VpZ2h0PSIzMDAiIGZvbnQtc3R5bGU9Iml0YWxpYyI+S2VidXR1aGFuOiBiYWNrZW5kIGNlcGF0LCBtdXJhaCwgZGFuIHRldGFwIHRlcmtlbmRhbGk8L3RleHQ+Cjwvc3ZnPg=="
                          data-alt="Latar belakang"
                          data-month="Urgensi di Indonesia"
                          data-stock="± 45 detik">
@@ -102,7 +1296,7 @@
                     <div class="plate"
                          role="button"
                          tabindex="0"
-                         data-img="images/slide-03.svg"
+                         data-img="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjQwIDQwMCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0Y0RjdGQSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0RERTdGMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjQwMCIgZmlsbD0idXJsKCNnKSIvPgo8cGF0aCBkPSJNMjQ1LjAsMTQ5LjAgTDI0NS4wLDI1MS4wIEE3NS4wLDI0LjAgMCAwIDAgMzk1LjAsMjUxLjAgTDM5NS4wLDE0OS4wIFoiIGZpbGw9IiM0QTZFOTYiLz48ZWxsaXBzZSBjeD0iMzIwIiBjeT0iMTQ5LjAiIHJ4PSI3NS4wIiByeT0iMjQuMCIgZmlsbD0iI0I5Q0RFNSIvPjxwYXRoIGQ9Ik0yNDUuMCwxODcuMCBBNzUuMCwyNC4wIDAgMCAwIDM5NS4wLDE4Ny4wIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1vcGFjaXR5PSIuNSIvPjxwYXRoIGQ9Ik0yNDUuMCwyMzcuMCBBNzUuMCwyNC4wIDAgMCAwIDM5NS4wLDIzNy4wIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1vcGFjaXR5PSIuNSIvPjx0ZXh0IHg9IjMyMCIgeT0iMjA2IiBmb250LXNpemU9IjE3IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjUwMCIgPlBvc3RncmVTUUw8L3RleHQ+PGxpbmUgeDE9IjMyMCIgeTE9IjIwMCIgeDI9IjExMCIgeTI9IjkwIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0iNCA0Ii8+PHJlY3QgeD0iNDgiIHk9IjY4IiB3aWR0aD0iMTI0IiBoZWlnaHQ9IjQ0IiByeD0iMjIiIGZpbGw9IiNmZmYiIHN0cm9rZT0iIzk2QjFEMCIgc3Ryb2tlLXdpZHRoPSIxLjIiLz48dGV4dCB4PSIxMTAiIHk9Ijk1IiBmb250LXNpemU9IjE0IiBmaWxsPSIjMUIyMjMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPkF1dGg8L3RleHQ+PGxpbmUgeDE9IjMyMCIgeTE9IjIwMCIgeDI9IjUzMCIgeTI9IjkwIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0iNCA0Ii8+PHJlY3QgeD0iNDY4IiB5PSI2OCIgd2lkdGg9IjEyNCIgaGVpZ2h0PSI0NCIgcng9IjIyIiBmaWxsPSIjZmZmIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iNTMwIiB5PSI5NSIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiID5BUEkgb3RvbWF0aXM8L3RleHQ+PGxpbmUgeDE9IjMyMCIgeTE9IjIwMCIgeDI9IjExMCIgeTI9IjMxMCIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9IjQgNCIvPjxyZWN0IHg9IjQ4IiB5PSIyODgiIHdpZHRoPSIxMjQiIGhlaWdodD0iNDQiIHJ4PSIyMiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEuMiIvPjx0ZXh0IHg9IjExMCIgeT0iMzE1IiBmb250LXNpemU9IjE0IiBmaWxsPSIjMUIyMjMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPlN0b3JhZ2U8L3RleHQ+PGxpbmUgeDE9IjMyMCIgeTE9IjIwMCIgeDI9IjUzMCIgeTI9IjMxMCIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9IjQgNCIvPjxyZWN0IHg9IjQ2OCIgeT0iMjg4IiB3aWR0aD0iMTI0IiBoZWlnaHQ9IjQ0IiByeD0iMjIiIGZpbGw9IiNmZmYiIHN0cm9rZT0iIzk2QjFEMCIgc3Ryb2tlLXdpZHRoPSIxLjIiLz48dGV4dCB4PSI1MzAiIHk9IjMxNSIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiID5SZWFsdGltZTwvdGV4dD48dGV4dCB4PSIzMjAiIHk9IjQ4IiBmb250LXNpemU9IjE4IiBmaWxsPSIjNUI2ODc5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXdlaWdodD0iMzAwIiBmb250LXN0eWxlPSJpdGFsaWMiPlNhdHUgaW50aSBkYXRhLCBiYW55YWsgbGF5YW5hbjwvdGV4dD4KPC9zdmc+"
                          data-alt="Rumusan masalah"
                          data-month="Definisi"
                          data-stock="± 45 detik">
@@ -118,7 +1312,7 @@
                     <div class="plate"
                          role="button"
                          tabindex="0"
-                         data-img="images/slide-04.svg"
+                         data-img="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjQwIDQwMCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0Y0RjdGQSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0RERTdGMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjQwMCIgZmlsbD0idXJsKCNnKSIvPgo8dGV4dCB4PSIzMjAiIHk9IjM2IiBmb250LXNpemU9IjE2IiBmaWxsPSIjNUI2ODc5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXdlaWdodD0iMzAwIiBmb250LXN0eWxlPSJpdGFsaWMiPkFyc2l0ZWt0dXIgKHN0YWNrIHNlbGYtaG9zdGVkKTwvdGV4dD48cmVjdCB4PSIyMjAiIHk9IjUyIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjQwIiByeD0iNiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEuMiIvPjx0ZXh0IHg9IjMyMCIgeT0iNzciIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMxQjIyMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNTAwIiA+QXBsaWthc2kga2xpZW48L3RleHQ+PGxpbmUgeDE9IjMyMCIgeTE9IjkyIiB4Mj0iMzIwIiB5Mj0iMTEyIiBzdHJva2U9IiM0QTZFOTYiIHN0cm9rZS13aWR0aD0iMS41IiAvPjxyZWN0IHg9IjIwMCIgeT0iMTEyIiB3aWR0aD0iMjQwIiBoZWlnaHQ9IjQwIiByeD0iNiIgZmlsbD0iIzRBNkU5NiIgc3Ryb2tlPSIjNEE2RTk2IiBzdHJva2Utd2lkdGg9IjEuMiIvPjx0ZXh0IHg9IjMyMCIgeT0iMTM3IiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjUwMCIgPkFQSSBHYXRld2F5IChLb25nKTwvdGV4dD48bGluZSB4MT0iMzIwIiB5MT0iMTUyIiB4Mj0iOTAiIHkyPSIxOTAiIHN0cm9rZT0iIzk2QjFEMCIgc3Ryb2tlLXdpZHRoPSIxIiAvPjxyZWN0IHg9IjQwIiB5PSIxOTAiIHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIHJ4PSI2IiBmaWxsPSIjZmZmIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iOTAiIHk9IjIxNSIgZm9udC1zaXplPSIxMyIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiID5Qb3N0Z1JFU1Q8L3RleHQ+PGxpbmUgeDE9IjkwIiB5MT0iMjMwIiB4Mj0iMzIwIiB5Mj0iMjcyIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMSIgLz48bGluZSB4MT0iMzIwIiB5MT0iMTUyIiB4Mj0iMjA0IiB5Mj0iMTkwIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMSIgLz48cmVjdCB4PSIxNTQiIHk9IjE5MCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSI0MCIgcng9IjYiIGZpbGw9IiNmZmYiIHN0cm9rZT0iIzk2QjFEMCIgc3Ryb2tlLXdpZHRoPSIxLjIiLz48dGV4dCB4PSIyMDQiIHk9IjIxNSIgZm9udC1zaXplPSIxMyIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiID5BdXRoPC90ZXh0PjxsaW5lIHgxPSIyMDQiIHkxPSIyMzAiIHgyPSIzMjAiIHkyPSIyNzIiIHN0cm9rZT0iIzk2QjFEMCIgc3Ryb2tlLXdpZHRoPSIxIiAvPjxsaW5lIHgxPSIzMjAiIHkxPSIxNTIiIHgyPSIzMTgiIHkyPSIxOTAiIHN0cm9rZT0iIzk2QjFEMCIgc3Ryb2tlLXdpZHRoPSIxIiAvPjxyZWN0IHg9IjI2OCIgeT0iMTkwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiByeD0iNiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEuMiIvPjx0ZXh0IHg9IjMxOCIgeT0iMjE1IiBmb250LXNpemU9IjEzIiBmaWxsPSIjMUIyMjMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPlJlYWx0aW1lPC90ZXh0PjxsaW5lIHgxPSIzMTgiIHkxPSIyMzAiIHgyPSIzMjAiIHkyPSIyNzIiIHN0cm9rZT0iIzk2QjFEMCIgc3Ryb2tlLXdpZHRoPSIxIiAvPjxsaW5lIHgxPSIzMjAiIHkxPSIxNTIiIHgyPSI0MzIiIHkyPSIxOTAiIHN0cm9rZT0iIzk2QjFEMCIgc3Ryb2tlLXdpZHRoPSIxIiAvPjxyZWN0IHg9IjM4MiIgeT0iMTkwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiByeD0iNiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEuMiIvPjx0ZXh0IHg9IjQzMiIgeT0iMjE1IiBmb250LXNpemU9IjEzIiBmaWxsPSIjMUIyMjMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPlN0b3JhZ2U8L3RleHQ+PGxpbmUgeDE9IjQzMiIgeTE9IjIzMCIgeDI9IjMyMCIgeTI9IjI3MiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEiIC8+PGxpbmUgeDE9IjMyMCIgeTE9IjE1MiIgeDI9IjU0NiIgeTI9IjE5MCIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEiIC8+PHJlY3QgeD0iNDk2IiB5PSIxOTAiIHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIHJ4PSI2IiBmaWxsPSIjZmZmIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHRleHQgeD0iNTQ2IiB5PSIyMTUiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiMxQjIyMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiA+RWRnZSBGbjwvdGV4dD48bGluZSB4MT0iNTQ2IiB5MT0iMjMwIiB4Mj0iMzIwIiB5Mj0iMjcyIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMSIgLz48cmVjdCB4PSIxOTAiIHk9IjI3MiIgd2lkdGg9IjI2MCIgaGVpZ2h0PSI1NiIgcng9IjYiIGZpbGw9IiNEREU3RjIiIHN0cm9rZT0iIzRBNkU5NiIgc3Ryb2tlLXdpZHRoPSIxLjYiLz48dGV4dCB4PSIzMjAiIHk9IjMwNiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI1MDAiID5Qb3N0Z3JlU1FMPC90ZXh0Pjx0ZXh0IHg9IjMyMCIgeT0iMzU4IiBmb250LXNpemU9IjEyLjUiIGZpbGw9IiM1QjY4NzkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiA+U3R1ZGlvOiBkYXNib3IgcGVuZ2Vsb2xhYW4gZGkgYXRhcyBzZW11YSBsYXlhbmFuPC90ZXh0Pgo8L3N2Zz4="
                          data-alt="Pembahasan inti"
                          data-month="Arsitektur"
                          data-stock="± 45 detik">
@@ -134,7 +1328,7 @@
                     <div class="plate"
                          role="button"
                          tabindex="0"
-                         data-img="images/slide-05.svg"
+                         data-img="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjQwIDQwMCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0Y0RjdGQSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0RERTdGMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjQwMCIgZmlsbD0idXJsKCNnKSIvPgo8cmVjdCB4PSI1MCIgeT0iNjAiIHdpZHRoPSIxNzAiIGhlaWdodD0iMTEwIiByeD0iNiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEuMiIvPjxyZWN0IHg9IjUwIiB5PSI2MCIgd2lkdGg9IjQiIGhlaWdodD0iMTEwIiBmaWxsPSIjNEE2RTk2Ii8+PHRleHQgeD0iNzIiIHk9IjExNCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXdlaWdodD0iMzAwIiA+RGF0YWJhc2U8L3RleHQ+PHRleHQgeD0iNzIiIHk9IjEzOCIgZm9udC1zaXplPSIxMi41IiBmaWxsPSIjNUI2ODc5IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiA+UG9zdGdyZXMgcGVudWg8L3RleHQ+PHJlY3QgeD0iMjQwIiB5PSI2MCIgd2lkdGg9IjE3MCIgaGVpZ2h0PSIxMTAiIHJ4PSI2IiBmaWxsPSIjZmZmIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHJlY3QgeD0iMjQwIiB5PSI2MCIgd2lkdGg9IjQiIGhlaWdodD0iMTEwIiBmaWxsPSIjNEE2RTk2Ii8+PHRleHQgeD0iMjYyIiB5PSIxMTQiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiMxQjIyMzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC13ZWlnaHQ9IjMwMCIgPkF1dGg8L3RleHQ+PHRleHQgeD0iMjYyIiB5PSIxMzgiIGZvbnQtc2l6ZT0iMTIuNSIgZmlsbD0iIzVCNjg3OSIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPkxvZ2luICZhbXA7IHBlcmFuPC90ZXh0PjxyZWN0IHg9IjQzMCIgeT0iNjAiIHdpZHRoPSIxNzAiIGhlaWdodD0iMTEwIiByeD0iNiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEuMiIvPjxyZWN0IHg9IjQzMCIgeT0iNjAiIHdpZHRoPSI0IiBoZWlnaHQ9IjExMCIgZmlsbD0iIzRBNkU5NiIvPjx0ZXh0IHg9IjQ1MiIgeT0iMTE0IiBmb250LXNpemU9IjE4IiBmaWxsPSIjMUIyMjMzIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCAnVGltZXMgTmV3IFJvbWFuJywgc2VyaWYiIGZvbnQtd2VpZ2h0PSIzMDAiID5TdG9yYWdlPC90ZXh0Pjx0ZXh0IHg9IjQ1MiIgeT0iMTM4IiBmb250LXNpemU9IjEyLjUiIGZpbGw9IiM1QjY4NzkiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiID5GaWxlICZhbXA7IG1lZGlhPC90ZXh0PjxyZWN0IHg9IjUwIiB5PSIyMDAiIHdpZHRoPSIxNzAiIGhlaWdodD0iMTEwIiByeD0iNiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEuMiIvPjxyZWN0IHg9IjUwIiB5PSIyMDAiIHdpZHRoPSI0IiBoZWlnaHQ9IjExMCIgZmlsbD0iIzRBNkU5NiIvPjx0ZXh0IHg9IjcyIiB5PSIyNTQiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiMxQjIyMzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC13ZWlnaHQ9IjMwMCIgPlJlYWx0aW1lPC90ZXh0Pjx0ZXh0IHg9IjcyIiB5PSIyNzgiIGZvbnQtc2l6ZT0iMTIuNSIgZmlsbD0iIzVCNjg3OSIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPkRhdGEgbGFuZ3N1bmc8L3RleHQ+PHJlY3QgeD0iMjQwIiB5PSIyMDAiIHdpZHRoPSIxNzAiIGhlaWdodD0iMTEwIiByeD0iNiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEuMiIvPjxyZWN0IHg9IjI0MCIgeT0iMjAwIiB3aWR0aD0iNCIgaGVpZ2h0PSIxMTAiIGZpbGw9IiM0QTZFOTYiLz48dGV4dCB4PSIyNjIiIHk9IjI1NCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXdlaWdodD0iMzAwIiA+RWRnZSBGdW5jdGlvbnM8L3RleHQ+PHRleHQgeD0iMjYyIiB5PSIyNzgiIGZvbnQtc2l6ZT0iMTIuNSIgZmlsbD0iIzVCNjg3OSIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPkxvZ2lrYSBzZXJ2ZXI8L3RleHQ+PHJlY3QgeD0iNDMwIiB5PSIyMDAiIHdpZHRoPSIxNzAiIGhlaWdodD0iMTEwIiByeD0iNiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEuMiIvPjxyZWN0IHg9IjQzMCIgeT0iMjAwIiB3aWR0aD0iNCIgaGVpZ2h0PSIxMTAiIGZpbGw9IiM0QTZFOTYiLz48dGV4dCB4PSI0NTIiIHk9IjI1NCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXdlaWdodD0iMzAwIiA+VmVjdG9yIC8gQUk8L3RleHQ+PHRleHQgeD0iNDUyIiB5PSIyNzgiIGZvbnQtc2l6ZT0iMTIuNSIgZmlsbD0iIzVCNjg3OSIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPnBndmVjdG9yPC90ZXh0Pjx0ZXh0IHg9IjMyMCIgeT0iMzcyIiBmb250LXNpemU9IjEzIiBmaWxsPSIjNEE2RTk2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXdlaWdodD0iMzAwIiBmb250LXN0eWxlPSJpdGFsaWMiPlJvdyBMZXZlbCBTZWN1cml0eSBtZWxpbmR1bmdpIGRhdGEgZGkgdGluZ2thdCBiYXJpczwvdGV4dD4KPC9zdmc+"
                          data-alt="Pembahasan inti"
                          data-month="Fitur &amp; kegunaan"
                          data-stock="± 45 detik">
@@ -150,7 +1344,7 @@
                     <div class="plate"
                          role="button"
                          tabindex="0"
-                         data-img="images/slide-06.svg"
+                         data-img="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjQwIDQwMCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0Y0RjdGQSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0RERTdGMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjQwMCIgZmlsbD0idXJsKCNnKSIvPgo8bGluZSB4MT0iODAiIHkxPSIxMjAiIHgyPSI1NjAiIHkyPSIxMjAiIHN0cm9rZT0iIzk2QjFEMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIC8+PGNpcmNsZSBjeD0iODAiIGN5PSIxMjAiIHI9IjE4IiBmaWxsPSIjNEE2RTk2Ii8+PHRleHQgeD0iODAiIHk9IjEyNiIgZm9udC1zaXplPSIxNiIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPjE8L3RleHQ+PHRleHQgeD0iODAiIHk9IjE2NiIgZm9udC1zaXplPSIxMy41IiBmaWxsPSIjMUIyMjMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjUwMCIgPkJ1YXQgcHJveWVrPC90ZXh0PjxjaXJjbGUgY3g9IjI0MCIgY3k9IjEyMCIgcj0iMTgiIGZpbGw9IiM0QTZFOTYiLz48dGV4dCB4PSIyNDAiIHk9IjEyNiIgZm9udC1zaXplPSIxNiIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPjI8L3RleHQ+PHRleHQgeD0iMjQwIiB5PSIxNjYiIGZvbnQtc2l6ZT0iMTMuNSIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI1MDAiID5SYW5jYW5nIHRhYmVsPC90ZXh0PjxjaXJjbGUgY3g9IjQwMCIgY3k9IjEyMCIgcj0iMTgiIGZpbGw9IiM0QTZFOTYiLz48dGV4dCB4PSI0MDAiIHk9IjEyNiIgZm9udC1zaXplPSIxNiIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPjM8L3RleHQ+PHRleHQgeD0iNDAwIiB5PSIxNjYiIGZvbnQtc2l6ZT0iMTMuNSIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI1MDAiID5BdHVyIEF1dGggJmFtcDsgUkxTPC90ZXh0PjxjaXJjbGUgY3g9IjU2MCIgY3k9IjEyMCIgcj0iMTgiIGZpbGw9IiM0QTZFOTYiLz48dGV4dCB4PSI1NjAiIHk9IjEyNiIgZm9udC1zaXplPSIxNiIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPjQ8L3RleHQ+PHRleHQgeD0iNTYwIiB5PSIxNjYiIGZvbnQtc2l6ZT0iMTMuNSIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI1MDAiID5TYW1idW5na2FuIGFwcDwvdGV4dD48cmVjdCB4PSI3MCIgeT0iMjE0IiB3aWR0aD0iNTAwIiBoZWlnaHQ9IjEyMCIgcng9IjYiIGZpbGw9IiMxQjIyMzMiIHN0cm9rZT0iIzFCMjIzMyIgc3Ryb2tlLXdpZHRoPSIxLjIiLz48dGV4dCB4PSI5MiIgeT0iMjQ2IiBmb250LXNpemU9IjEyLjUiIGZpbGw9IiNEREU3RjIiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1lbmxvLCBDb25zb2xhcywgbW9ub3NwYWNlIiBmb250LXdlaWdodD0iNDAwIiA+aW1wb3J0IHsgY3JlYXRlQ2xpZW50IH0gZnJvbSAnQHN1cGFiYXNlL3N1cGFiYXNlLWpzJzwvdGV4dD48dGV4dCB4PSI5MiIgeT0iMjcwIiBmb250LXNpemU9IjEyLjUiIGZpbGw9IiNEREU3RjIiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1lbmxvLCBDb25zb2xhcywgbW9ub3NwYWNlIiBmb250LXdlaWdodD0iNDAwIiA+Y29uc3Qgc3VwYWJhc2UgPSBjcmVhdGVDbGllbnQoVVJMLCBBTk9OX0tFWSk8L3RleHQ+PHRleHQgeD0iOTIiIHk9IjI5NCIgZm9udC1zaXplPSIxMi41IiBmaWxsPSIjRERFN0YyIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZvbnQtZmFtaWx5PSJNZW5sbywgQ29uc29sYXMsIG1vbm9zcGFjZSIgZm9udC13ZWlnaHQ9IjQwMCIgPmNvbnN0IHsgZGF0YSB9ID0gYXdhaXQgc3VwYWJhc2U8L3RleHQ+PHRleHQgeD0iOTIiIHk9IjMxOCIgZm9udC1zaXplPSIxMi41IiBmaWxsPSIjRERFN0YyIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZvbnQtZmFtaWx5PSJNZW5sbywgQ29uc29sYXMsIG1vbm9zcGFjZSIgZm9udC13ZWlnaHQ9IjQwMCIgPiAgLmZyb20oJ3Byb2R1aycpLnNlbGVjdCgnKicpPC90ZXh0Pgo8L3N2Zz4="
                          data-alt="Strategi implementasi"
                          data-month="Cara pakai"
                          data-stock="± 45 detik">
@@ -166,7 +1360,7 @@
                     <div class="plate"
                          role="button"
                          tabindex="0"
-                         data-img="images/slide-07.svg"
+                         data-img="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjQwIDQwMCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0Y0RjdGQSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0RERTdGMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjQwMCIgZmlsbD0idXJsKCNnKSIvPgo8cmVjdCB4PSI0MCIgeT0iNTAiIHdpZHRoPSIxODAiIGhlaWdodD0iMzAwIiByeD0iNiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjOTZCMUQwIiBzdHJva2Utd2lkdGg9IjEuMiIvPjxyZWN0IHg9IjQwIiB5PSI1MCIgd2lkdGg9IjE4MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzRBNkU5NiIvPjx0ZXh0IHg9IjYwIiB5PSI5MiIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXdlaWdodD0iMzAwIiA+S2VsZWJpaGFuPC90ZXh0PjxjaXJjbGUgY3g9IjY0IiBjeT0iMTQwIiByPSI0IiBmaWxsPSIjNEE2RTk2Ii8+PHRleHQgeD0iNzgiIHk9IjE0NSIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzVCNjg3OSIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPlRhbnBhIGxvY2staW48L3RleHQ+PGNpcmNsZSBjeD0iNjQiIGN5PSIyMDAiIHI9IjQiIGZpbGw9IiM0QTZFOTYiLz48dGV4dCB4PSI3OCIgeT0iMjA1IiBmb250LXNpemU9IjE0IiBmaWxsPSIjNUI2ODc5IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiA+U1FMIHN0YW5kYXI8L3RleHQ+PGNpcmNsZSBjeD0iNjQiIGN5PSIyNjAiIHI9IjQiIGZpbGw9IiM0QTZFOTYiLz48dGV4dCB4PSI3OCIgeT0iMjY1IiBmb250LXNpemU9IjE0IiBmaWxsPSIjNUI2ODc5IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiA+QmlheWEgdGVycHJlZGlrc2k8L3RleHQ+PHJlY3QgeD0iMjQwIiB5PSI1MCIgd2lkdGg9IjE4MCIgaGVpZ2h0PSIzMDAiIHJ4PSI2IiBmaWxsPSIjZmZmIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHJlY3QgeD0iMjQwIiB5PSI1MCIgd2lkdGg9IjE4MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzk2QjFEMCIvPjx0ZXh0IHg9IjI2MCIgeT0iOTIiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiMxQjIyMzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC13ZWlnaHQ9IjMwMCIgPktla3VyYW5nYW48L3RleHQ+PGNpcmNsZSBjeD0iMjY0IiBjeT0iMTQwIiByPSI0IiBmaWxsPSIjOTZCMUQwIi8+PHRleHQgeD0iMjc4IiB5PSIxNDUiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM1QjY4NzkiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiID5CdXR1aCBEZXZPcHM8L3RleHQ+PGNpcmNsZSBjeD0iMjY0IiBjeT0iMjAwIiByPSI0IiBmaWxsPSIjOTZCMUQwIi8+PHRleHQgeD0iMjc4IiB5PSIyMDUiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM1QjY4NzkiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiID5Ta2FsYSBiZXNhcjogdHVuaW5nPC90ZXh0PjxjaXJjbGUgY3g9IjI2NCIgY3k9IjI2MCIgcj0iNCIgZmlsbD0iIzk2QjFEMCIvPjx0ZXh0IHg9IjI3OCIgeT0iMjY1IiBmb250LXNpemU9IjE0IiBmaWxsPSIjNUI2ODc5IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiA+RWtvc2lzdGVtIGxlYmloIG11ZGE8L3RleHQ+PHJlY3QgeD0iNDQwIiB5PSI1MCIgd2lkdGg9IjE4MCIgaGVpZ2h0PSIzMDAiIHJ4PSI2IiBmaWxsPSIjZmZmIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHJlY3QgeD0iNDQwIiB5PSI1MCIgd2lkdGg9IjE4MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzVCNjg3OSIvPjx0ZXh0IHg9IjQ2MCIgeT0iOTIiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiMxQjIyMzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC13ZWlnaHQ9IjMwMCIgPk1vZGlmaWthc2k8L3RleHQ+PGNpcmNsZSBjeD0iNDY0IiBjeT0iMTQwIiByPSI0IiBmaWxsPSIjNUI2ODc5Ii8+PHRleHQgeD0iNDc4IiB5PSIxNDUiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM1QjY4NzkiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiID5Gb3JrICZhbXA7IHNlbGYtaG9zdDwvdGV4dD48Y2lyY2xlIGN4PSI0NjQiIGN5PSIyMDAiIHI9IjQiIGZpbGw9IiM1QjY4NzkiLz48dGV4dCB4PSI0NzgiIHk9IjIwNSIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzVCNjg3OSIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgPkVrc3RlbnNpIFBvc3RncmVzPC90ZXh0PjxjaXJjbGUgY3g9IjQ2NCIgY3k9IjI2MCIgcj0iNCIgZmlsbD0iIzVCNjg3OSIvPjx0ZXh0IHg9IjQ3OCIgeT0iMjY1IiBmb250LXNpemU9IjE0IiBmaWxsPSIjNUI2ODc5IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiA+RWRnZSBGdW5jdGlvbnM8L3RleHQ+Cjwvc3ZnPg=="
                          data-alt="Dampak &amp; tantangan"
                          data-month="Mitigasi risiko"
                          data-stock="± 45 detik">
@@ -182,7 +1376,7 @@
                     <div class="plate"
                          role="button"
                          tabindex="0"
-                         data-img="images/slide-08.svg"
+                         data-img="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjQwIDQwMCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0Y0RjdGQSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0RERTdGMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjQwMCIgZmlsbD0idXJsKCNnKSIvPgo8Y2lyY2xlIGN4PSIzMjAiIGN5PSIxNzAiIHI9Ijg0IiBmaWxsPSIjZmZmIiBzdHJva2U9IiM5NkIxRDAiIHN0cm9rZS13aWR0aD0iMS4yIi8+PHBvbHlsaW5lIHBvaW50cz0iMjgyLDE3MiAzMTEsMjAwIDM2MiwxNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzRBNkU5NiIgc3Ryb2tlLXdpZHRoPSI5IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48dGV4dCB4PSIzMjAiIHk9IjMwMCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzFCMjIzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC13ZWlnaHQ9IjMwMCIgZm9udC1zdHlsZT0iaXRhbGljIj5DZXBhdCBzZXBlcnRpIEJhYVMsIHRlcmtlbmRhbGkgc2VwZXJ0aSBvcGVuIHNvdXJjZTwvdGV4dD48dGV4dCB4PSIzMjAiIHk9IjMzNiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzVCNjg3OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiID5TZXNpIHRhbnlhIGphd2FiPC90ZXh0Pgo8L3N2Zz4="
                          data-alt="Penutup"
                          data-month="Key takeaways &amp; tanya jawab"
                          data-stock="± 45 detik">
@@ -332,6 +1526,688 @@
                 <button class="close" id="close" aria-label="Tutup pengaturan putaran">&times;</button>
             </div>
         </section>
-        <script src="templatemo-630-helix-script.js"></script>
+        <script>
+/*
+  Berbasis template Helix Drift
+  https://templatemo.com/tm-630-helix-drift
+*/
+
+(function() {
+    "use strict";
+
+    /* ------------------------------------------------------------------ data */
+    /* content now lives in the markup, this script only reads it */
+
+    var STEP = 0.34; /* radians per plate along the coil axis */
+    var REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ------------------------------------------------------------- elements */
+    var stage = document.getElementById("stage");
+    var capEl = document.getElementById("caption");
+    var capNo = document.getElementById("capNo");
+    var capTitle = document.getElementById("capTitle");
+    var capPoints = document.getElementById("capPoints");
+    var capVisual = document.getElementById("capVisual");
+    var capNotes = document.getElementById("capNotes");
+    var capMeta = document.getElementById("capMeta");
+    var scrub = document.getElementById("scrub");
+    var scrubFill = document.getElementById("scrubFill");
+    var ticksBox = document.getElementById("ticks");
+    var thumb = document.getElementById("thumb");
+    var scrubLab = document.getElementById("scrubLabel");
+
+    /* ------------------------------------------------------------ build DOM */
+    var plates = [];
+    var ticks = [];
+
+    function fallback(i) {
+        var a = "%23DDE7F2",
+            b = "%2396B1D0";
+        return "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='640' height='400'>" +
+            "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>" +
+            "<stop offset='0' stop-color='" + a + "'/><stop offset='1' stop-color='" + b + "'/>" +
+            "</linearGradient></defs><rect width='640' height='400' fill='url(%23g)'/>" +
+            "<text x='40' y='340' font-family='Georgia,serif' font-size='120' fill='rgba(255,255,255,.72)'>" +
+            (i < 9 ? "0" + (i + 1) : (i + 1)) + "</text></svg>\")";
+    }
+
+    var PLATES = [];
+    var nodes = stage.querySelectorAll(".plate");
+    var N = nodes.length;
+
+    Array.prototype.forEach.call(nodes, function(el, i) {
+        var no = (i < 9 ? "0" + (i + 1) : "" + (i + 1));
+        var info = el.querySelector(".plate-info");
+        var h = info ? info.querySelector("h2") : null;
+        var ul = info ? info.querySelector("ul") : null;
+        var pv = info ? info.querySelector("p.v") : null;
+        var pn = info ? info.querySelector("p.n") : null;
+
+        var p = {
+            t: h ? h.textContent.trim() : "Slide " + no,
+            pts: ul ? Array.prototype.map.call(ul.querySelectorAll("li"), function(li) { return li.textContent.trim(); }) : [],
+            v: pv ? pv.textContent.trim() : "",
+            n: pn ? pn.textContent.trim() : "",
+            alt: el.dataset.alt || "",
+            mo: el.dataset.month || "",
+            st: el.dataset.stock || ""
+        };
+        PLATES.push(p);
+
+        var m = el.querySelector(".plate-media");
+        var tag = el.querySelector(".plate-no");
+        if (tag && !tag.textContent.trim()) tag.textContent = no + " / 0" + nodes.length;
+        el.setAttribute("aria-label", "Slide " + no + ", " + p.t);
+        el.dataset.i = i;
+
+        plates.push({
+            el: el,
+            media: m,
+            data: p
+        });
+
+        /* no img tags anywhere, so the native ghost drag can never fire */
+        var src = el.dataset.img;
+        if (src) {
+            var pre = new Image();
+            pre.onload = function() {
+                m.style.backgroundImage = "url('" + pre.src + "')";
+            };
+            pre.onerror = function() {
+                m.style.backgroundImage = fallback(i);
+            };
+            pre.src = src;
+        } else {
+            m.style.backgroundImage = fallback(i);
+        }
+
+        var tk = document.createElement("i");
+        tk.className = "tick";
+        tk.style.left = (i / (nodes.length - 1) * 100) + "%";
+        ticksBox.appendChild(tk);
+        ticks.push(tk);
+    });
+
+    /* --------------------------------------------------------------- state */
+    var pos = 0,
+        target = 0,
+        raf = 0,
+        running = false;
+    var settled = -1;
+    var RX = 600,
+        RY = 54,
+        COIL = 0.9,
+        FALL = 0.52;
+
+    function readVars() {
+        var cs = getComputedStyle(document.documentElement);
+        /* parseFloat("0") is falsy, so || would silently replace a legitimate 0
+           with the fallback, which made coil rise 0 snap back to 54 */
+        function num(name, fb) {
+            var v = parseFloat(cs.getPropertyValue(name));
+            return isNaN(v) ? fb : v;
+        }
+        RX = num("--rx", 600);
+        RY = num("--ry", 54);
+        COIL = num("--coil", 0.9);
+        FALL = num("--fall", 0.52);
+    }
+    readVars();
+
+    var range = 5;
+
+    function readRange() {
+        range = window.innerWidth < 900 ? 3 : 5;
+    }
+    readRange();
+
+    /* --------------------------------------------------------------- render */
+    function render() {
+        var i, p, d, a, th, x, y, rotY, rotZ, sc, op, sat, bl, near = 999,
+            nearI = 0;
+
+        for (i = 0; i < N; i++) {
+            p = plates[i];
+            d = ((i - pos + N / 2 + N * 2) % N) - N / 2;
+            a = Math.abs(d);
+
+            if (a > range + 0.5) {
+                if (p.el.style.display !== "none") p.el.style.display = "none";
+                continue;
+            }
+            if (p.el.style.display === "none") p.el.style.display = "";
+
+            if (a < near) {
+                near = a;
+                nearI = i;
+            }
+
+            th = d * STEP;
+            x = Math.sin(th) * RX;
+            y = -Math.sin(d * COIL) * RY;
+            rotY = -th * 57.2958 * 0.85;
+            rotZ = d * 1.4;
+
+            sc = Math.max(0.36, 1 / (1 + FALL * Math.pow(a, 1.15)));
+            op = Math.max(0.14, 1 - 0.34 * a);
+            sat = 0.28 + 0.72 / (1 + 0.9 * a);
+            bl = (a < 1.6 || window.innerWidth < 900) ? 0 : Math.min(2.2, (a - 1.6) * 1.1);
+
+            p.el.style.transform =
+                "translate(-50%,-50%) translate3d(" + x.toFixed(2) + "px," + y.toFixed(2) + "px,0) rotateY(" +
+                rotY.toFixed(2) + "deg) rotateZ(" + rotZ.toFixed(2) + "deg) scale(" + sc.toFixed(4) + ")";
+            p.el.style.opacity = op.toFixed(3);
+
+            /* restacking a 3D-transformed layer mid-composite flickers, so write only on change */
+            var zi = Math.round(1000 - a * 10);
+            if (zi !== p.zi) {
+                p.el.style.zIndex = zi;
+                p.zi = zi;
+            }
+
+            p.media.style.filter = "saturate(" + sat.toFixed(3) + ")" + (bl ? " blur(" + bl.toFixed(2) + "px)" : "");
+            p.el.classList.toggle("is-centre", a < 0.5);
+        }
+
+        paintScrub();
+        if (nearI !== settled) setCaption(nearI);
+    }
+
+    function loop() {
+        pos += (target - pos) * 0.14;
+        if (Math.abs(target - pos) < 0.0004) {
+            pos = target;
+            running = false;
+            render();
+            return;
+        }
+        render();
+        raf = requestAnimationFrame(loop);
+    }
+
+    function kick() {
+        /* keep pos and target from drifting far from the ring */
+        if (target > N * 2 || target < -N * 2) {
+            var k = Math.round(target / N) * N;
+            target -= k;
+            pos -= k;
+        }
+        if (REDUCED) {
+            pos = target;
+            render();
+            return;
+        }
+        if (!running) {
+            running = true;
+            raf = requestAnimationFrame(loop);
+        }
+    }
+
+    /* -------------------------------------------------------------- caption */
+    var swapTimer = 0;
+
+    function setCaption(i) {
+        settled = i;
+        var p = PLATES[i];
+        clearTimeout(swapTimer);
+        capEl.classList.add("swap");
+        swapTimer = setTimeout(function() {
+            capNo.textContent = (i < 9 ? "0" + (i + 1) : (i + 1));
+            capTitle.textContent = p.t;
+            capPoints.innerHTML = "";
+            p.pts.forEach(function(t) {
+                var li = document.createElement("li");
+                li.textContent = t;
+                capPoints.appendChild(li);
+            });
+            capVisual.textContent = "Visual: " + p.v;
+            capNotes.textContent = p.n;
+            capMeta.innerHTML = "<span>" + p.alt + "</span><span>" + p.mo + "</span><span>" + p.st + "</span>";
+            capEl.classList.remove("swap");
+        }, REDUCED ? 0 : 160);
+
+        scrub.setAttribute("aria-valuenow", i + 1);
+        scrub.setAttribute("aria-valuetext", (i + 1) + " dari " + N + ", " + p.t);
+        scrubLab.textContent = (i < 9 ? "0" + (i + 1) : (i + 1)) + " / 0" + N;
+        for (var k = 0; k < N; k++) ticks[k].classList.toggle("on", k === i);
+    }
+
+    /* ---------------------------------------------------------------- scrub */
+    function ringPos() {
+        return ((pos % N) + N) % N; /* 0 .. N, the last unit is the wrap gap */
+    }
+
+    function paintScrub() {
+        var v = ringPos(),
+            frac;
+        /* plates 01 to 09 map across the track, then the wrap segment sweeps the
+           thumb back to the start instead of parking it at the far right */
+        if (v <= N - 1) frac = v / (N - 1);
+        else frac = 1 - (v - (N - 1));
+        frac = Math.max(0, Math.min(1, frac));
+        var w = scrub.clientWidth;
+        scrubFill.style.width = (frac * 100) + "%";
+        thumb.style.left = (frac * w) + "px";
+    }
+
+    function scrubTo(clientX) {
+        var r = scrub.getBoundingClientRect();
+        var frac = (clientX - r.left) / r.width;
+        frac = Math.max(0, Math.min(1, frac));
+        var want = frac * (N - 1);
+        var base = Math.round((pos - want) / N) * N; /* nearest equivalent turn */
+        target = want + base;
+        kick();
+    }
+
+    var scrubbing = false;
+
+    function endScrub(e) {
+        if (!scrubbing) return;
+        scrubbing = false;
+        try {
+            if (e && e.pointerId !== undefined) scrub.releasePointerCapture(e.pointerId);
+        } catch (err) {}
+        target = Math.round(target);
+        kick();
+    }
+    scrub.addEventListener("pointerdown", function(e) {
+        if (playing) setPlay(false);
+        scrubbing = true;
+        try {
+            scrub.setPointerCapture(e.pointerId);
+        } catch (err) {}
+        scrubTo(e.clientX);
+        e.preventDefault();
+    });
+    scrub.addEventListener("pointermove", function(e) {
+        if (scrubbing) scrubTo(e.clientX);
+    });
+    scrub.addEventListener("pointerup", endScrub);
+    scrub.addEventListener("pointercancel", endScrub);
+    scrub.addEventListener("lostpointercapture", endScrub);
+    window.addEventListener("pointerup", endScrub);
+    window.addEventListener("blur", endScrub);
+    scrub.addEventListener("dragstart", function(e) {
+        e.preventDefault();
+    });
+    scrub.addEventListener("keydown", function(e) {
+        var k = e.key;
+        if (k === "ArrowLeft" || k === "ArrowDown") {
+            target = Math.round(target) - 1;
+            kick();
+            e.preventDefault();
+        } else if (k === "ArrowRight" || k === "ArrowUp") {
+            target = Math.round(target) + 1;
+            kick();
+            e.preventDefault();
+        } else if (k === "Home") {
+            target = 0;
+            pos = ((pos % N) + N) % N;
+            kick();
+            e.preventDefault();
+        } else if (k === "End") {
+            target = N - 1;
+            kick();
+            e.preventDefault();
+        }
+    });
+
+    /* ------------------------------------------------------------ stage drag */
+    var down = false,
+        startX = 0,
+        startT = 0,
+        lastX = 0,
+        lastT = 0,
+        vel = 0,
+        moved = false;
+
+    function plateWidth() {
+        return plates[0].el.offsetWidth || 400;
+    }
+
+    function onDown(e) {
+        if (playing) setPlay(false);
+        down = true;
+        moved = false;
+        startX = lastX = e.clientX;
+        startT = target;
+        lastT = performance.now();
+        vel = 0;
+        stage.classList.add("grabbing");
+        try {
+            stage.setPointerCapture(e.pointerId);
+        } catch (err) {}
+    }
+
+    function onMove(e) {
+        if (!down) return;
+        var dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) moved = true;
+        target = startT - dx / (plateWidth() * 0.62);
+        var now = performance.now(),
+            dt = now - lastT;
+        if (dt > 0) {
+            vel = (e.clientX - lastX) / dt;
+            lastX = e.clientX;
+            lastT = now;
+        }
+        kick();
+    }
+
+    function onUp(e) {
+        if (!down) return;
+        down = false;
+        stage.classList.remove("grabbing");
+        try {
+            if (e && e.pointerId !== undefined) stage.releasePointerCapture(e.pointerId);
+        } catch (err) {}
+        var flick = -vel * 0.34;
+        flick = Math.max(-2.2, Math.min(2.2, flick));
+        target = Math.round(target + flick);
+        kick();
+    }
+    stage.addEventListener("pointerdown", onDown);
+    stage.addEventListener("pointermove", onMove);
+    stage.addEventListener("pointerup", onUp);
+    stage.addEventListener("pointercancel", onUp);
+    stage.addEventListener("lostpointercapture", onUp);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("blur", onUp);
+    stage.addEventListener("dragstart", function(e) {
+        e.preventDefault();
+    });
+
+    stage.addEventListener("wheel", function(e) {
+        var raw = (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) * 0.0032;
+        raw = Math.max(-0.9, Math.min(0.9, raw));
+        target += raw;
+        kick();
+        clearTimeout(stage._wt);
+        stage._wt = setTimeout(function() {
+            target = Math.round(target);
+            kick();
+        }, 170);
+        e.preventDefault();
+    }, {
+        passive: false
+    });
+
+    /* -------------------------------------------------------- plate actions */
+    plates.forEach(function(p, i) {
+        p.el.addEventListener("click", function() {
+            if (moved) return;
+            var d = ((i - pos + N / 2 + N * 2) % N) - N / 2;
+            if (Math.abs(d) < 0.5) {
+                p.el.classList.add("press");
+                setTimeout(function() {
+                    p.el.classList.remove("press");
+                }, 140);
+                return;
+            }
+            target = Math.round(pos + d);
+            kick();
+        });
+        p.el.addEventListener("keydown", function(e) {
+            if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+            e.preventDefault();
+            var d = ((i - pos + N / 2 + N * 2) % N) - N / 2;
+            if (Math.abs(d) < 0.5) {
+                p.el.classList.add("press");
+                setTimeout(function() {
+                    p.el.classList.remove("press");
+                }, 140);
+            } else {
+                target = Math.round(pos + d);
+                kick();
+            }
+        });
+        p.el.addEventListener("focus", function() {
+            var d = ((i - pos + N / 2 + N * 2) % N) - N / 2;
+            if (Math.abs(d) > 0.5) {
+                target = Math.round(pos + d);
+                kick();
+            }
+        });
+    });
+
+    document.addEventListener("keydown", function(e) {
+        if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+        if (e.key === "ArrowLeft") {
+            target = Math.round(target) - 1;
+            kick();
+        } else if (e.key === "ArrowRight") {
+            target = Math.round(target) + 1;
+            kick();
+        }
+    });
+
+    /* ------------------------------------------------- transport, autoplay */
+    var tpBtn = document.getElementById("tpBtn");
+    var tpFill = document.getElementById("tpFill");
+    var tpVal = document.getElementById("tpVal");
+    var tpMinus = document.getElementById("tpMinus");
+    var tpPlus = document.getElementById("tpPlus");
+
+    var DUR_MIN = 1,
+        DUR_MAX = 30;
+    var dur = 10,
+        playing = false,
+        tStart = 0,
+        tRaf = 0;
+
+    function tick(now) {
+        if (!playing) return;
+        var f = (now - tStart) / (dur * 1000);
+        if (f >= 1) {
+            tStart = now;
+            f = 0;
+            target = Math.round(target) + 1;
+            kick();
+        }
+        tpFill.style.width = (f * 100).toFixed(2) + "%";
+        tRaf = requestAnimationFrame(tick);
+    }
+
+    function setPlay(on) {
+        playing = on;
+        tpBtn.classList.toggle("playing", on);
+        tpBtn.setAttribute("aria-pressed", on ? "true" : "false");
+        tpBtn.setAttribute("aria-label", on ? "Jeda putar otomatis" : "Putar otomatis");
+        cancelAnimationFrame(tRaf);
+        if (on) {
+            tStart = performance.now();
+            tRaf = requestAnimationFrame(tick);
+        } else tpFill.style.width = "0%";
+    }
+
+    function setDur(v) {
+        dur = Math.max(DUR_MIN, Math.min(DUR_MAX, v));
+        tpVal.textContent = dur + "s";
+        tpMinus.disabled = dur <= DUR_MIN;
+        tpPlus.disabled = dur >= DUR_MAX;
+        if (playing) tStart = performance.now(); /* restart the run, never jump mid-fill */
+        else tpFill.style.width = "0%";
+    }
+
+    tpBtn.addEventListener("click", function() {
+        setPlay(!playing);
+    });
+    tpMinus.addEventListener("click", function() {
+        setDur(dur - 1);
+    });
+    tpPlus.addEventListener("click", function() {
+        setDur(dur + 1);
+    });
+
+    document.addEventListener("visibilitychange", function() {
+        if (!playing) return;
+        if (document.hidden) {
+            cancelAnimationFrame(tRaf);
+        } else {
+            tStart = performance.now();
+            tRaf = requestAnimationFrame(tick);
+        }
+    });
+
+    setDur(10);
+    /* winds on load, change to setPlay(false) to start paused.
+       REDUCED is honoured here so auto advancing motion never starts
+       for someone who asked the OS for reduced motion */
+    setPlay(false);
+
+    /* -------------------------------------------------------- coil control */
+    var fab = document.getElementById("fab");
+    var panel = document.getElementById("panel");
+    var closeBtn = document.getElementById("close");
+    var sRx = document.getElementById("sRx"),
+        sRy = document.getElementById("sRy"),
+        sFall = document.getElementById("sFall");
+    var vRx = document.getElementById("vRx"),
+        vRy = document.getElementById("vRy"),
+        vFall = document.getElementById("vFall");
+    var stateEl = document.getElementById("state");
+
+    function fill(el) {
+        var v = (el.value - el.min) / (el.max - el.min) * 100;
+        el.style.setProperty("--fill", v + "%");
+    }
+
+    function coilName(ry) {
+        if (ry <= 18) return "Flat reel";
+        if (ry <= 44) return "Slack coil";
+        if (ry <= 68) return "Working spool";
+        return "Tight winding";
+    }
+
+    function applyVars() {
+        document.documentElement.style.setProperty("--rx", sRx.value);
+        document.documentElement.style.setProperty("--ry", sRy.value);
+        document.documentElement.style.setProperty("--fall", sFall.value);
+        vRx.textContent = sRx.value;
+        vRy.textContent = sRy.value;
+        vFall.textContent = parseFloat(sFall.value).toFixed(2);
+        stateEl.textContent = coilName(parseFloat(sRy.value));
+        readVars();
+        render();
+    }
+    [sRx, sRy, sFall].forEach(function(el) {
+        fill(el);
+        el.addEventListener("input", function() {
+            fill(el);
+            applyVars();
+        });
+    });
+
+    function setControl(open, focusIn) {
+        panel.classList.toggle("open", open);
+        fab.classList.toggle("gone", open);
+        fab.setAttribute("aria-expanded", open ? "true" : "false");
+        if (open && focusIn) sRx.focus();
+        if (!open && focusIn) fab.focus();
+    }
+    fab.addEventListener("click", function() {
+        setControl(true, true);
+    });
+    closeBtn.addEventListener("click", function() {
+        setControl(false, true);
+    });
+    setControl(false, false);
+
+    /* ---------------------------------------------------------- drawer, esc */
+    var burger = document.getElementById("burger"),
+        drawer = document.getElementById("drawer");
+
+    function setDrawer(open) {
+        drawer.classList.toggle("open", open);
+        document.body.classList.toggle("lock", open);
+        burger.setAttribute("aria-expanded", open ? "true" : "false");
+        burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    }
+    burger.addEventListener("click", function() {
+        setDrawer(!drawer.classList.contains("open"));
+    });
+    drawer.addEventListener("click", function(e) {
+        if (e.target.tagName === "A") setDrawer(false);
+    });
+
+    document.addEventListener("keydown", function(e) {
+        if (e.key !== "Escape") return;
+        if (drawer.classList.contains("open")) setDrawer(false);
+        else if (panel.classList.contains("open")) setControl(false, true);
+    });
+
+    /* ---------------------------------------------------------- reveal, fit */
+    var io = new IntersectionObserver(function(ents) {
+        ents.forEach(function(en) {
+            if (en.isIntersecting) {
+                en.target.classList.add("in");
+                io.unobserve(en.target);
+            }
+        });
+    }, {
+        threshold: .15
+    });
+    var rvs = document.querySelectorAll(".rv");
+    for (var r = 0; r < rvs.length; r++) io.observe(rvs[r]);
+    setTimeout(function() {
+        for (var r2 = 0; r2 < rvs.length; r2++) rvs[r2].classList.add("in");
+    }, 3000);
+
+    /* controls leave once the stage is half scrolled away, not at the very end of it */
+    var stageIO = new IntersectionObserver(function(ents) {
+        document.body.classList.toggle("away", ents[0].intersectionRatio < 0.5);
+    }, {
+        threshold: [0, .25, .5, .75, 1]
+    });
+    stageIO.observe(stage);
+
+    var rt = 0;
+    window.addEventListener("resize", function() {
+        clearTimeout(rt);
+        rt = setTimeout(function() {
+            readVars();
+            readRange();
+            render();
+        }, 120);
+    });
+
+
+    /* ------------------------------------------------ salin naskah Markdown */
+    var copyBtn = document.getElementById("copyMd");
+    var copyState = document.getElementById("copyState");
+    if (copyBtn) {
+        copyBtn.addEventListener("click", function() {
+            var md = PLATES.map(function(p, i) {
+                return "---\n### " + (i + 1) + ": " + p.t + "\n**Poin Utama:**\n" +
+                    p.pts.map(function(x) { return "- " + x; }).join("\n") +
+                    "\n*Rekomendasi Visual:* " + p.v +
+                    "\n*Speaker Notes (Naskah Presenter 45 Detik):* " + p.n + "\n";
+            }).join("\n") + "---";
+            function done(ok) {
+                copyState.textContent = ok ? "Tersalin. Tempel ke Gamma.app." : "Gagal menyalin, salin manual dari konsol.";
+                setTimeout(function() { copyState.textContent = ""; }, 3500);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(md).then(function() { done(true); }, function() { done(false); });
+            } else {
+                var ta = document.createElement("textarea");
+                ta.value = md;
+                document.body.appendChild(ta);
+                ta.select();
+                var ok = false;
+                try { ok = document.execCommand("copy"); } catch (e) {}
+                document.body.removeChild(ta);
+                done(ok);
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------ go */
+    setCaption(0);
+    render();
+})();
+
+</script>
     </body>
 </html>
