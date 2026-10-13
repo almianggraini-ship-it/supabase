@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<!--
+  Berbasis template Helix Drift
+  https://templatemo.com/tm-630-helix-drift
+-->
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Open Source Supabase // Backend terbuka untuk bisnis digital</title>
+        <meta name="description"
+              content="Presentasi ringkas 8 slide tentang Supabase: definisi, arsitektur, fitur, kelebihan, kekurangan, modifikasi, dan cara pakai untuk mahasiswa Bisnis Digital.">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@200;300;400;500&family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;1,6..72,300&display=swap"
+              rel="stylesheet">
+        <link rel="stylesheet" href="templatemo-630-helix-style.css">
+    </head>
+    <body>
+        <header class="bar">
+            <a class="brand" href="#top"><i></i>Open Source Supabase</a>
+            <nav class="nav">
+                <a href="#top">Slide
+                    <svg class="wv" viewBox="0 0 10 6" aria-hidden="true">
+                        <path d="M1 1 L5 5 L9 1" />
+                    </svg>
+                </a>
+                <a href="#about">Ringkasan
+                    <svg class="wv" viewBox="0 0 10 6" aria-hidden="true">
+                        <path d="M1 1 L5 5 L9 1" />
+                    </svg>
+                </a>
+                <a href="#contact">Referensi
+                    <svg class="wv" viewBox="0 0 10 6" aria-hidden="true">
+                        <path d="M1 1 L5 5 L9 1" />
+                    </svg>
+                </a>
+            </nav>
+            <button class="burger"
+                    id="burger"
+                    aria-label="Buka menu"
+                    aria-expanded="false"
+                    aria-controls="drawer">
+                <span></span><span></span><span></span>
+            </button>
+        </header>
+        <nav class="drawer" id="drawer">
+            <a href="#top">Slide
+                    <svg class="wv" viewBox="0 0 10 6" aria-hidden="true">
+                        <path d="M1 1 L5 5 L9 1" />
+                    </svg>
+                </a>
+                <a href="#about">Ringkasan
+                    <svg class="wv" viewBox="0 0 10 6" aria-hidden="true">
+                        <path d="M1 1 L5 5 L9 1" />
+                    </svg>
+                </a>
+                <a href="#contact">Referensi
+                    <svg class="wv" viewBox="0 0 10 6" aria-hidden="true">
+                        <path d="M1 1 L5 5 L9 1" />
+                    </svg>
+                </a>
+        </nav>
+        <main class="wrap" id="top">
+            <div class="stage-shell">
+                <div class="stage"
+                     id="stage"
+                     role="group"
+                     aria-label="Deretan slide presentasi, geser ke samping untuk berpindah">
+                                        <div class="plate"
+                         role="button"
+                         tabindex="0"
+                         data-img="images/slide-01.svg"
+                         data-alt="Pembuka"
+                         data-month="Hook &amp; subjudul"
+                         data-stock="± 45 detik">
+                        <span class="plate-media"></span>
+                        <span class="plate-no">01 / 08</span>
+                        <div class="plate-info">
+                            <h2>Supabase: Backend Open Source untuk Era Bisnis Digital</h2>
+                            <ul><li>Alternatif open source Firebase, berbasis PostgreSQL</li><li>Satu platform: database, autentikasi, storage, realtime</li><li>Startup kini meluncur tanpa membangun backend dari nol</li></ul>
+                            <p class="v">Ikon petir minimalis (bukan logo resmi) di kanan, judul serif besar di kiri, latar biru pucat bersih.</p>
+                            <p class="n">Selamat pagi. Bayangkan Anda punya ide aplikasi bisnis, tetapi tidak punya tim backend dan anggarannya terbatas. Dulu, itu hampir mustahil. Hari ini, ada platform open source bernama Supabase yang menyatukan database, autentikasi, penyimpanan file, dan data realtime dalam satu paket. Dalam lima belas menit ke depan, kita akan melihat apa itu Supabase, bagaimana cara kerjanya, dan mengapa ia relevan bagi calon pelaku bisnis digital seperti kita.</p>
+                        </div>
+                    </div>
+                    <div class="plate"
+                         role="button"
+                         tabindex="0"
+                         data-img="images/slide-02.svg"
+                         data-alt="Latar belakang"
+                         data-month="Urgensi di Indonesia"
+                         data-stock="± 45 detik">
+                        <span class="plate-media"></span>
+                        <span class="plate-no">02 / 08</span>
+                        <div class="plate-info">
+                            <h2>Latar Belakang: Mahalnya Membangun Backend</h2>
+                            <ul><li>Backend dari nol menuntut tim, waktu, dan biaya besar</li><li>Layanan BaaS tertutup berisiko vendor lock-in</li><li>UU PDP (No. 27/2022) menuntut kendali atas data</li></ul>
+                            <p class="v">Tiga lingkaran tipis berhubungan: Biaya, Lock-in, Kedaulatan Data. Ikon garis tunggal, tanpa warna mencolok.</p>
+                            <p class="n">Mari mulai dari masalahnya. Membangun backend sendiri berarti merekrut engineer, menyiapkan server, dan menjaga keamanan, semuanya memakan waktu dan uang. Di sisi lain, layanan backend tertutup memang praktis, tetapi membuat kita terikat pada satu vendor. Apalagi di Indonesia, Undang-Undang Pelindungan Data Pribadi nomor 27 tahun 2022 menuntut organisasi punya tata kelola data yang jelas. Artinya, kita butuh solusi yang cepat, terjangkau, sekaligus memberi kendali.</p>
+                        </div>
+                    </div>
+                    <div class="plate"
+                         role="button"
+                         tabindex="0"
+                         data-img="images/slide-03.svg"
+                         data-alt="Rumusan masalah"
+                         data-month="Definisi"
+                         data-stock="± 45 detik">
+                        <span class="plate-media"></span>
+                        <span class="plate-no">03 / 08</span>
+                        <div class="plate-info">
+                            <h2>Rumusan Masalah &amp; Definisi Solusi</h2>
+                            <ul><li>Supabase: platform pengembangan Postgres berbasis open source</li><li>Rumusan: bagaimana cepat membangun tanpa kehilangan kendali data?</li><li>Solusi: komponen terbuka yang bisa dihosting sendiri</li></ul>
+                            <p class="v">Diagram hub: silinder PostgreSQL di tengah, empat layanan (Auth, API, Storage, Realtime) mengelilinginya.</p>
+                            <p class="n">Dari situ, rumusan masalahnya jelas: bagaimana membangun produk digital dengan cepat tanpa kehilangan kendali atas data? Supabase menjawabnya dengan pendekatan sederhana. Intinya adalah database PostgreSQL, salah satu database relasional paling mapan di dunia. Di atasnya, Supabase menambahkan layanan siap pakai seperti autentikasi, API otomatis, penyimpanan, dan realtime. Semua komponennya open source, sehingga bisa dipakai lewat layanan cloud atau dijalankan di server sendiri.</p>
+                        </div>
+                    </div>
+                    <div class="plate"
+                         role="button"
+                         tabindex="0"
+                         data-img="images/slide-04.svg"
+                         data-alt="Pembahasan inti"
+                         data-month="Arsitektur"
+                         data-stock="± 45 detik">
+                        <span class="plate-media"></span>
+                        <span class="plate-no">04 / 08</span>
+                        <div class="plate-info">
+                            <h2>Arsitektur: Postgres di Pusat, Layanan Modular di Sekitarnya</h2>
+                            <ul><li>Inti: PostgreSQL sebagai satu sumber kebenaran data</li><li>Gateway (Kong) meneruskan permintaan ke layanan modular</li><li>PostgREST, Auth, Realtime, Storage membentuk API otomatis</li></ul>
+                            <p class="v">Diagram berlapis tiga: Klien, API Gateway, layanan modular, lalu PostgreSQL di dasar. Garis tipis, satu warna aksen.</p>
+                            <p class="n">Sekarang kita lihat arsitekturnya. Semua permintaan dari aplikasi klien lewat sebuah API gateway, dalam stack self-hosted memakai Kong. Gateway meneruskannya ke layanan modular. PostgREST mengubah tabel database menjadi REST API secara otomatis. Layanan Auth mengurus login dan token. Realtime menyiarkan perubahan data, dan Storage mengelola file. Semuanya bermuara ke satu PostgreSQL. Karena modular, tiap komponen bisa diganti atau dikembangkan sendiri.</p>
+                        </div>
+                    </div>
+                    <div class="plate"
+                         role="button"
+                         tabindex="0"
+                         data-img="images/slide-05.svg"
+                         data-alt="Pembahasan inti"
+                         data-month="Fitur &amp; kegunaan"
+                         data-stock="± 45 detik">
+                        <span class="plate-media"></span>
+                        <span class="plate-no">05 / 08</span>
+                        <div class="plate-info">
+                            <h2>Fitur Utama, Keunggulan, dan Kegunaan</h2>
+                            <ul><li>Database Postgres, Auth, Storage, Realtime, Edge Functions</li><li>Row Level Security: akses data diatur per pengguna</li><li>Kegunaan: SaaS, aplikasi mobile, dasbor, fitur AI</li></ul>
+                            <p class="v">Grid 2x3 kartu fitur dengan ikon garis tipis: database, kunci, folder, sinyal, fungsi, vektor.</p>
+                            <p class="n">Apa saja yang bisa dilakukan? Fiturnya mencakup database Postgres penuh, autentikasi, penyimpanan file, data realtime, dan Edge Functions untuk logika sisi server. Keunggulan yang menonjol adalah Row Level Security, yaitu aturan akses data langsung di level baris, sehingga setiap pengguna hanya melihat datanya sendiri. Kegunaannya luas: dari produk SaaS, aplikasi mobile, dasbor internal, sampai fitur kecerdasan buatan memakai ekstensi pgvector untuk menyimpan embedding.</p>
+                        </div>
+                    </div>
+                    <div class="plate"
+                         role="button"
+                         tabindex="0"
+                         data-img="images/slide-06.svg"
+                         data-alt="Strategi implementasi"
+                         data-month="Cara pakai"
+                         data-stock="± 45 detik">
+                        <span class="plate-media"></span>
+                        <span class="plate-no">06 / 08</span>
+                        <div class="plate-info">
+                            <h2>Cara Pakai: Empat Langkah Menuju Prototipe</h2>
+                            <ul><li>Buat proyek, rancang tabel lewat Table Editor atau SQL</li><li>Aktifkan Auth dan kebijakan Row Level Security</li><li>Hubungkan aplikasi lewat pustaka klien, misalnya supabase-js</li></ul>
+                            <p class="v">Timeline horizontal empat titik bernomor, dengan satu blok kode pendek (createClient) di bawahnya.</p>
+                            <p class="n">Cara pakainya cukup ringkas. Pertama, buat proyek di dasbor Supabase, lalu rancang tabel lewat Table Editor atau langsung dengan SQL. Kedua, aktifkan autentikasi dan tulis kebijakan Row Level Security supaya data aman. Ketiga, hubungkan aplikasi Anda dengan pustaka klien seperti supabase-js. Cukup beberapa baris kode untuk membuat klien dan membaca data dari tabel. Dalam hitungan jam, prototipe sudah bisa berjalan.</p>
+                        </div>
+                    </div>
+                    <div class="plate"
+                         role="button"
+                         tabindex="0"
+                         data-img="images/slide-07.svg"
+                         data-alt="Dampak &amp; tantangan"
+                         data-month="Mitigasi risiko"
+                         data-stock="± 45 detik">
+                        <span class="plate-media"></span>
+                        <span class="plate-no">07 / 08</span>
+                        <div class="plate-info">
+                            <h2>Kelebihan, Kekurangan, dan Ruang Modifikasi</h2>
+                            <ul><li>Kelebihan: tanpa lock-in, SQL standar, biaya terprediksi</li><li>Kekurangan: self-hosting menuntut keahlian DevOps dan keamanan</li><li>Modifikasi: fork, ekstensi Postgres, Edge Functions kustom</li></ul>
+                            <p class="v">Tiga kolom sejajar (Kelebihan, Kekurangan, Modifikasi) dengan penanda titik kecil, tanpa ikon berwarna-warni.</p>
+                            <p class="n">Tentu ada sisi baik dan tantangannya. Kelebihannya: tidak terkunci vendor, memakai SQL standar, dan biaya lebih mudah diprediksi. Kekurangannya: kalau dihosting sendiri, kita yang menanggung operasional, keamanan, backup, dan pembaruan. Ekosistemnya juga lebih muda dibanding pemain lama. Mitigasinya, mulai dari layanan cloud terkelola, lalu pindah ke self-hosting bila tim sudah siap. Karena open source, kita juga bebas memodifikasi lewat fork, ekstensi Postgres, atau fungsi kustom.</p>
+                        </div>
+                    </div>
+                    <div class="plate"
+                         role="button"
+                         tabindex="0"
+                         data-img="images/slide-08.svg"
+                         data-alt="Penutup"
+                         data-month="Key takeaways &amp; tanya jawab"
+                         data-stock="± 45 detik">
+                        <span class="plate-media"></span>
+                        <span class="plate-no">08 / 08</span>
+                        <div class="plate-info">
+                            <h2>Kesimpulan dan Ajakan Bertindak</h2>
+                            <ul><li>Supabase memadukan kecepatan BaaS dan kendali open source</li><li>Cocok untuk prototipe, MVP, dan produk SaaS</li><li>Langkah awal: bangun satu prototipe kecil minggu ini</li></ul>
+                            <p class="v">Satu ikon centang dalam lingkaran tipis, tiga baris kesimpulan, dan ruang kosong luas untuk sesi tanya jawab.</p>
+                            <p class="n">Sebagai penutup, tiga hal untuk dibawa pulang. Pertama, Supabase memadukan kecepatan layanan backend siap pakai dengan kendali penuh khas open source. Kedua, ia sangat cocok untuk prototipe, MVP, dan produk SaaS. Ketiga, cara terbaik memahaminya adalah mencoba. Saya menantang Anda membuat satu prototipe kecil minggu ini. Terima kasih, dan sekarang saya persilakan pertanyaan dari Bapak, Ibu, dan teman-teman.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="caption rv" id="caption" aria-live="polite">
+                <div class="cap-head">
+                    <span class="cap-no" id="capNo">01</span>
+                    <span class="cap-rule"></span>
+                    <h1 class="cap-title" id="capTitle"></h1>
+                </div>
+                <ul class="cap-points" id="capPoints"></ul>
+                <p class="cap-visual" id="capVisual"></p>
+                <details class="cap-notes" id="capNotesBox">
+                    <summary>Speaker notes (naskah 45 detik)</summary>
+                    <p id="capNotes"></p>
+                </details>
+                <div class="cap-meta" id="capMeta"></div>
+            </section>
+            <div class="scrub-shell rv" id="scrubShell">
+                <div class="scrub"
+                     id="scrub"
+                     role="slider"
+                     tabindex="0"
+                     aria-label="Posisi slide"
+                     aria-valuemin="1"
+                     aria-valuemax="8"
+                     aria-valuenow="1">
+                    <div class="scrub-track"></div>
+                    <div class="scrub-fill" id="scrubFill"></div>
+                    <div class="scrub-ticks" id="ticks"></div>
+                    <div class="thumb" id="thumb">
+                        <i></i><i></i>
+                    </div>
+                </div>
+                <div class="scrub-label" id="scrubLabel">01 / 08</div>
+            </div>
+            <section class="sheet rv" id="about">
+                <span class="sheet-tag">Ringkasan</span>
+                <h2>Delapan slide, satu alur utuh</h2>
+                <p>Naskah ini dirancang untuk mahasiswa S1 Manajemen dan Bisnis Digital yang ingin memahami teknologi open source terbaru tanpa harus menjadi programmer. Alurnya: masalah, definisi, arsitektur, fitur, cara pakai, lalu risiko dan kesimpulan.</p>
+                <p>Setiap slide memuat tiga poin padat, saran visual bergaya minimalis akademik, dan speaker notes sekitar 45 detik. Tempelkan versi Markdown-nya langsung ke Gamma.app atau Canva AI.</p>
+                <dl class="facts">
+                    <div><dt>Jumlah slide</dt><dd>8</dd></div>
+                    <div><dt>Durasi</dt><dd>10 sampai 15 menit</dd></div>
+                    <div><dt>Gaya visual</dt><dd>Minimalis akademik</dd></div>
+                    <div><dt>Audiens</dt><dd>S1 Bisnis Digital</dd></div>
+                </dl>
+                <button class="copy-md" id="copyMd" type="button">Salin naskah Markdown untuk Gamma</button>
+                <span class="copy-state" id="copyState" role="status"></span>
+            </section>
+            <section class="sheet rv" id="contact">
+                <span class="sheet-tag">Referensi</span>
+                <h2>Sumber resmi dan bahan tanya jawab</h2>
+                <p>Periksa selalu dokumentasi resmi untuk fitur, batas penggunaan, dan harga terbaru, karena platform ini berkembang cepat.</p>
+                <ul class="lines">
+                    <li><span>Situs</span><a href="https://supabase.com" target="_blank" rel="noopener">supabase.com</a></li>
+                    <li><span>Dokumentasi</span><a href="https://supabase.com/docs" target="_blank" rel="noopener">supabase.com/docs</a></li>
+                    <li><span>Kode sumber</span><a href="https://github.com/supabase/supabase" target="_blank" rel="noopener">github.com/supabase/supabase</a></li>
+                </ul>
+            </section>
+            <footer class="foot rv">
+                <span>Open Source Supabase. Materi presentasi kilat, 2026.</span>
+                <span>Desain oleh <a href="https://templatemo.com/page/1" rel="nofollow noopener" target="_blank">TemplateMo</a> and <a href="https://www.tooplate.com/free-templates" rel="nofollow noopener" target="_blank">Tooplate</a></span>
+            </footer>
+        </main>
+        <div class="transport"
+             id="transport"
+             role="group"
+             aria-label="Putar otomatis">
+            <button class="tp-btn playing"
+                    id="tpBtn"
+                    aria-pressed="true"
+                    aria-label="Jeda putar otomatis">
+                <svg class="ico-play"
+                     width="12"
+                     height="13"
+                     viewBox="0 0 12 13"
+                     aria-hidden="true">
+                    <path d="M1 1.2 11 6.5 1 11.8Z" fill="#4A6E96" />
+                </svg>
+                <svg class="ico-pause"
+                     width="11"
+                     height="12"
+                     viewBox="0 0 11 12"
+                     aria-hidden="true">
+                    <rect x="1" y="1" width="3" height="10" fill="#4A6E96" />
+                    <rect x="7" y="1" width="3" height="10" fill="#4A6E96" />
+                </svg>
+            </button>
+            <span class="tp-stack">
+                <span class="tp-dur">
+                    <button class="tp-step" id="tpMinus" aria-label="Interval lebih singkat">&minus;</button>
+                    <span class="tp-val" id="tpVal" aria-live="polite">10s</span>
+                    <button class="tp-step" id="tpPlus" aria-label="Interval lebih lama">+</button>
+                </span>
+                <span class="tp-line" aria-hidden="true"><i id="tpFill"></i></span>
+            </span>
+        </div>
+        <button class="fab" id="fab" aria-label="Buka pengaturan putaran">
+            <svg width="17"
+                 height="17"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="#4A6E96"
+                 stroke-width="1.2"
+                 stroke-linecap="round">
+                <path d="M12 3c-4.5 0-8 2-8 4.5S7 12 12 12s8 2 8 4.5S16.5 21 12 21" />
+                <path d="M4 7.5v9C4 19 7.5 21 12 21" />
+                <path d="M20 16.5v-9C20 5 16.5 3 12 3" />
+            </svg>
+        </button>
+        <section class="panel"
+                 id="panel"
+                 role="dialog"
+                 aria-label="Pengaturan putaran"
+                 aria-modal="false">
+            <h2>Putaran</h2>
+            <div class="slot">
+                <label for="sRx"><span>Lebar putaran</span><span id="vRx">600</span></label>
+                <input type="range" id="sRx" min="360" max="780" step="10" value="600">
+            </div>
+            <div class="slot">
+                <label for="sRy"><span>Tinggi putaran</span><span id="vRy">54</span></label>
+                <input type="range" id="sRy" min="0" max="96" step="2" value="54">
+            </div>
+            <div class="slot">
+                <label for="sFall"><span>Redaman kedalaman</span><span id="vFall">0.52</span></label>
+                <input type="range"
+                       id="sFall"
+                       min="0.30"
+                       max="0.86"
+                       step="0.02"
+                       value="0.52">
+            </div>
+            <div class="panel-out">
+                <span class="state" id="state">Putaran kerja</span>
+                <button class="close" id="close" aria-label="Tutup pengaturan putaran">&times;</button>
+            </div>
+        </section>
+        <script src="templatemo-630-helix-script.js"></script>
+    </body>
+</html>
